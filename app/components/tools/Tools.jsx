@@ -1,11 +1,12 @@
 import React from 'react';
-import SideBar from './SideBar';
-import ToolsContent from './ToolsContent';
+import { NavLink } from '@remix-run/react';
 
 const Tools = () => {
   return (
     <div className='tools_container w-full h-full'>
-      <ToolsContent />
+      <div className='tools_content_container w-full h-full'>
+        <NavLink to={'/dynamic-links'}>Dynamic Links</NavLink>
+      </div>
     </div>
   )
 }
