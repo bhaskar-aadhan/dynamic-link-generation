@@ -137,3 +137,13 @@ body {
     height: calc(100% - 35px);
     z-index: -1;
 }
+
+table{
+    padding: 1rem;
+}
+table tr th,
+table tr td
+{
+    padding: 1rem;
+    border: 1px solid black;
+}
