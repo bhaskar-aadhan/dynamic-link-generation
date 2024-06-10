@@ -1,9 +1,9 @@
 -- Migration number: 0001 	 2024-06-10T13:07:05.918Z
 
-create table DynamicLinks(
-    id integer primary key AUTO_INCREMENT,
-    link varchar(500),
-    short_link varchar(100),
+create table dynamiclinks(
+    id integer primary key AUTOINCREMENT,
+    link TEXT,
+    short_link TEXT,
     clicks integer,
-    created_at varchar(100) default CURRENT_TIMESTAMP  
+    created_at TEXT
 )
