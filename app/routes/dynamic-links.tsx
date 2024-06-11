@@ -15,7 +15,7 @@ export const action: ActionFunction = async ({ request, context }: ActionFunctio
   const { env } = context.cloudflare;
   const uid = new ShortUniqueId({ length: 10 })
   const body = await request.formData();
-  const result = await env.DB.prepare("INSERT INTO dynamiclinks(link, short_link, clicks) VALUES(?1, ?2, ?3)").bind(body.get("urlinput"), uid.rnd(), 0).run()
+  const result = await env.DB.prepare("INSERT INTO dynamiclinks(link, short_link, android_app_id, apple_app_id, clicks) VALUES(?1, ?2, ?3, ?4, ?5)").bind(body.get("urlinput"), uid.rnd(), body.get("androidid"), body.get("appleid"), 0).run()
   console.log("formData", body, result)
   return redirect('/dynamic-links')
 }
@@ -24,7 +24,9 @@ const DynamicLinksIndex = () => {
   const { origin, urlList }: any = useLoaderData()
   return (
     <div className='dynamic-link grid_center bg-[#fafafa] w-full h-full'>
-      <Form method='post' className='flex justify-center items-center'>
+      <Form method='post' className='flex flex-col justify-center items-start gap-3 border-[1px] border-solid border-blue-700 p-5 rounded-md'>
+      <div className='flex gap-2 justify-center items-center'>
+        <label className='font-semibold' htmlFor="urlinput">Link: </label>
         <input
           type="text"
           id='urlinput'
@@ -33,6 +35,29 @@ const DynamicLinksIndex = () => {
           className='p-1 border-[0.5px] border-solid border-black'
           required
         />
+      </div>
+      <div className='flex gap-2 justify-center items-center'>
+        <label className='font-semibold' htmlFor="androidid">Android App Id: </label>
+        <input
+          type="text"
+          id='androidid'
+          name='androidid'
+          placeholder='Enter/ paste your android app id'
+          className='p-1 border-[0.5px] border-solid border-black'
+          required
+        />
+      </div>
+      <div className='flex gap-2 justify-center items-center'>
+        <label className='font-semibold' htmlFor="appleid">Apple App Id: </label>
+        <input
+          type="text"
+          id='appleid'
+          name='appleid'
+          placeholder='Enter/ paste your apple app id'
+          className='p-1 border-[0.5px] border-solid border-black'
+          required
+        />
+      </div>
         <button className='p-1 border-[0.5px] border-solid border-black'>Genearte</button>
       </Form>
       <div className='url_list_container'>
@@ -48,8 +73,8 @@ const DynamicLinksIndex = () => {
             {urlList?.map((u: any) => {
               return (
                 <tr key={u?.['short_link']}>
-                  <td><a className='text-blue-500 hover:underline' target='_blank' href={u?.['link']}>{u?.['link']}</a></td>
-                  <td><a className='text-blue-500 hover:underline' target='_blank' href={origin + '/' + u?.['short_link']}>{origin + '/' + u?.['short_link']}</a></td>
+                  <td><a className='text-blue-500 hover:underline' target='_blank' rel="noreferrer" href={u?.['link']}>{u?.['link']}</a></td>
+                  <td><a className='text-blue-500 hover:underline' target='_blank' rel="noreferrer" href={origin + '/' + u?.['short_link']}>{origin + '/' + u?.['short_link']}</a></td>
                   <td>{u?.['clicks']}</td>
                 </tr>
               )
